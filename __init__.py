@@ -37,6 +37,7 @@ def sendAllAlerts():
             #if int(input('Type "1" if you would like to save the page html code to text file. Type "2" to cancel: ')) == 1:
                 #with open("PageHTML.txt", "w") as text_file:
                     #text_file.write(page)
+                    #sys.exit()
 
 
             count = int(page.count('h3 class="pwr_card-heading alt">'))

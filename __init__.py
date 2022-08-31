@@ -15,11 +15,6 @@ payload = {
     'login': 'Log In'
 }
 
-payload['username'] = 'Evan Britton'
-payload['password'] = 'Spa#12950715'
-payload['DistrictCode'] = 'EC-VA'
-
-
 def sendAllAlerts():
 
     users = []
@@ -94,6 +89,7 @@ while True:
     currentHour = int(time.strftime("%H"))
     currentDay = int(date.today().isoweekday())
     #print(currentHour)
+    print('Current hour = ' + str(currentHour))
 
     if currentDay in weekdayList:
         if currentHour == 18: # 6pm every day

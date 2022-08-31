@@ -1,13 +1,4 @@
-from pushbullet import Pushbullet
 import smtplib, ssl
-
-
-
-pb = Pushbullet('o.KRoEAeCZNj5dr2JocPb68ZuKJbLLBf9u')
-
-def sendAlert(number, textData):
-    device = pb.devices[0]
-    push = pb.push_sms(device, "+" + number, textData)
 
 
 

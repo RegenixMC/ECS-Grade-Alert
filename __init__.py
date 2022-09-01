@@ -6,38 +6,40 @@ import time
 from databaseManager import addUser
 import sys
 from datetime import date
-
-
+import sqlite3
 
 # Fill in your details here to be posted to the login form.
-payload = {
-    'UserType': 'PARENTSWEB-STUDENT',
-    'login': 'Log In'
-}
 
 def sendAllAlerts():
 
-    users = []
-    userDatabase = open('database/userLoginInfo.txt', 'r')
-    count = 0
+    userDatabase = open('database/user_database.json', 'r')
     for line in userDatabase:
-        count+=1
-        email = str(((line.split(' '))[1].split(' ')[0]))
-        password = str(line.split(' ')[2])
+        username = str(line.split(' ')[1].split(' ')[0]).replace('_', ' ')
+        email = str(line.split(' ')[2].split(' ')[0])
+        password = (str(line.split(' ')[3]))
         name = str(line.split(' ')[0])
+        #print(name, username, email, password) # log the user information for testing purposes
+
+
+        payload = {
+            'UserType': 'PARENTSWEB-STUDENT',
+            'login': 'Log In',
+            'DistrictCode': 'EC-VA',
+            'username': username,
+            'password': password
+        }
 
 
         with requests.Session() as s:
             p = s.post('https://ec-va.client.renweb.com/pwr/', data=payload)
 
-            r = s.get('https://ec-va.client.renweb.com/pwr/student/homework.cfm', data={'by': 'subject'})
+            r = s.get('https://ec-va.client.renweb.com/pwr/student/homework.cfm')
             page = (r.text)
 
 
             #if int(input('Type "1" if you would like to save the page html code to text file. Type "2" to cancel: ')) == 1:
                 #with open("PageHTML.txt", "w") as text_file:
                     #text_file.write(page)
-                    #sys.exit()
 
 
             count = int(page.count('h3 class="pwr_card-heading alt">'))
@@ -46,7 +48,7 @@ def sendAllAlerts():
             emailContext = 'You have assignments due tomorrow in these following classes. '
             classNames = '\n'
 
-            for classText in range(count):
+            for i in range(count):
                 count1+=1
                 classUnsortedText = ((page.split('h3 class="pwr_card-heading alt"'))[count1].split('</div>')[0])
 
@@ -62,17 +64,14 @@ def sendAllAlerts():
                     emailContextClasses.append(assignmentName)
                 #print(assignmentName + ' ' + assignmentDueDate)
 
-            #sys.exit()
 
-        if emailContextClasses != None:
+        if emailContextClasses != []:
             classesDueTmr = int(len(emailContextClasses))
             for i in range(classesDueTmr):
                 classNames = (classNames + emailContextClasses[i] + '\n')
 
 
             emailContext = ('Good evening ' + name + ',\n\n' + 'You have assignments due in the following classes. ' + classNames)
-            #print(emailContext)
-            #sys.exit()
 
         else:
             emailContext = ('Good evening ' + name + '!\n\n' + 'It\'s your lucky day! You have no assignments or tests due tomorrow!')
@@ -82,6 +81,10 @@ def sendAllAlerts():
 
         sendEmail(emailContext, email)
 
+
+
+
+#sendAllAlerts()
 
 
 # Automatic alert system loop

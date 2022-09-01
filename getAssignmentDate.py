@@ -1,4 +1,5 @@
 from dateManager import *
+from bs4 import BeautifulSoup
 
 def getAssignmentDueDate(classUnsortedText, allUnsortedText):
 

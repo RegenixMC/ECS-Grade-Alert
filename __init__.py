@@ -1,12 +1,11 @@
 import requests
 from getAssignmentDate import getAssignmentDueDate
 from alert import *
-from getAssignmentObjective import *
 import time
 from databaseManager import addUser
 import sys
 from datetime import date
-import sqlite3
+from getCalendarDay import *
 
 # Fill in your details here to be posted to the login form.
 
@@ -14,11 +13,10 @@ def sendAllAlerts():
 
     userDatabase = open('database/user_database.json', 'r')
     for line in userDatabase:
-        username = str(line.split(' ')[1].split(' ')[0]).replace('_', ' ')
-        email = str(line.split(' ')[2].split(' ')[0])
-        password = (str(line.split(' ')[3]))
-        name = str(line.split(' ')[0])
-        #print(name, username, email, password) # log the user information for testing purposes
+        username = str(line.split(' ')[0]).replace('_', ' ')
+        email = str(line.split(' ')[1].split(' ')[0])
+        password = (str(line.split(' ')[2]))
+        #print(username, email, password) # log the user information for testing purposes
 
 
         payload = {
@@ -31,10 +29,8 @@ def sendAllAlerts():
 
 
         with requests.Session() as s:
-            p = s.post('https://ec-va.client.renweb.com/pwr/', data=payload)
-
-            r = s.get('https://ec-va.client.renweb.com/pwr/student/homework.cfm')
-            page = (r.text)
+            page = s.post('https://ec-va.client.renweb.com/pwr/', data=payload)
+            page = (s.get('https://ec-va.client.renweb.com/pwr/student/homework.cfm')).text
 
 
             #if int(input('Type "1" if you would like to save the page html code to text file. Type "2" to cancel: ')) == 1:
@@ -45,7 +41,7 @@ def sendAllAlerts():
             count = int(page.count('h3 class="pwr_card-heading alt">'))
             count1=0
             emailContextClasses=[]
-            emailContext = 'You have assignments due tomorrow in these following classes. '
+            userName = ((page.split('<div class="pwr_user-name">'))[1].split('</div>')[0])
             classNames = '\n'
 
             for i in range(count):
@@ -65,16 +61,20 @@ def sendAllAlerts():
                 #print(assignmentName + ' ' + assignmentDueDate)
 
 
+
+        emailContext = ('Good evening ' + userName + ',\n\n' + 'Tomorrow will be a ' + getDayColor(username, password) + ' Day so make make sure you have the required notebooks and folders for your classes.\n')
+        
         if emailContextClasses != []:
             classesDueTmr = int(len(emailContextClasses))
             for i in range(classesDueTmr):
                 classNames = (classNames + emailContextClasses[i] + '\n')
 
-
-            emailContext = ('Good evening ' + name + ',\n\n' + 'You have assignments due in the following classes. ' + classNames)
+            homeworkStatus = False
+            emailContext = ('Good evening ' + userName + ',\n\n' + 'Tomorrow will be a ' + getDayColor(username, password) + ' Day so make make sure you have the required notebooks and folders.\n' + 'You have an assignment and/or a test due tomorrow in the following classes...' + classNames)
 
         else:
-            emailContext = ('Good evening ' + name + '!\n\n' + 'It\'s your lucky day! You have no assignments or tests due tomorrow!')
+            homeworkStatus = True
+            emailContext = ('Good evening ' + userName + ',\n\n' + 'Tomorrow will be a ' + getDayColor(username, password) + ' Day so make make sure you have the required notebooks and folders.\n' + 'It\'s your lucky day! You have no assignments or tests due tomorrow!')
 
 
 
@@ -84,19 +84,20 @@ def sendAllAlerts():
 
 
 
-#sendAllAlerts()
 
+#sendAllAlerts()
 
 # Automatic alert system loop
 weekdayList = [1, 2, 3, 4, 5]
 while True:
     currentHour = int(time.strftime("%H"))
     currentDay = int(date.today().isoweekday())
-    #print(currentHour)
     print('Current hour = ' + str(currentHour))
 
     if currentDay in weekdayList:
-        if currentHour == 18: # 6pm every day
+        sendHour = 18  # 6pm every day
+        if currentHour == sendHour:
             sendAllAlerts()
-    
-    time.sleep(55)
+            while True:
+                if currentHour == sendHour + 1:
+                    break

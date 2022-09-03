@@ -1,7 +1,6 @@
 import requests
 from getAssignmentDate import getAssignmentDueDate
 from alert import *
-from databaseManager import addUser
 import sys
 from datetime import date
 from getCalendarDay import *
@@ -68,11 +67,9 @@ def sendAllAlerts():
             for i in range(classesDueTmr):
                 classNames = (classNames + emailContextClasses[i] + '\n')
 
-            homeworkStatus = False
             emailContext = ('Good evening ' + userName + ',\n\n' + 'Tomorrow will be a ' + getDayColor(username, password) + ' Day so make make sure you have the required notebooks and folders.\n' + 'You have an assignment and/or a test due tomorrow in the following classes...' + classNames)
 
         else:
-            homeworkStatus = True
             emailContext = ('Good evening ' + userName + ',\n\n' + 'Tomorrow will be a ' + getDayColor(username, password) + ' Day so make make sure you have the required notebooks and folders.\n' + 'It\'s your lucky day! You have no assignments or tests due tomorrow!')
 
 

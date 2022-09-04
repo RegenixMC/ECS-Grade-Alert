@@ -4,17 +4,23 @@ from alert import *
 import sys
 from datetime import date
 from getCalendarDay import *
+import os
 
 
 
 def sendAllAlerts():
 
-    userDatabase = open('database/user_database.json', 'r')
+    userDatabasePath = os.path.join("database","user_database.json")
+    userDatabase = open(userDatabasePath, 'r')
     for line in userDatabase:
-        username = str(line.split(' ')[0]).replace('_', ' ')
-        email = str(line.split(' ')[1].split(' ')[0])
-        password = (str(line.split(' ')[2]))
-        #print(username, email, password) # log the user information for testing purposes
+        try:
+            username = str(line.split(' ')[0]).replace('_', ' ')
+            email = str(line.split(' ')[1].split(' ')[0])
+            password = (str(line.split(' ')[2]))
+            #print(username, email, password) # log the user information for testing purposes
+        except:
+            return 'Finished!'
+            
 
 
         payload = {

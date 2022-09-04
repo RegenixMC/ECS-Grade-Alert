@@ -17,7 +17,7 @@ while True:
 
     if currentDay in weekdayList:
         print('Current hour = ' + str(currentHour))
-        sendHour = 15  # 18 = 6pm every day
+        sendHour = 18  # 18 = 6pm every day
         if currentHour == sendHour:
             print('Sending alerts...')
             sendAllAlerts()

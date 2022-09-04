@@ -10,17 +10,17 @@ from dateManager import *
 #sendAllAlerts()
 
 # Automatic alert system loop
-weekdayList = [1, 2, 3, 4, 5]
+weekdayList = [7, 1, 2, 3, 4]
 while True:
     currentHour = int(time.strftime("%H"))
     currentDay = int(date.today().isoweekday())
-    print('Current hour = ' + str(currentHour))
+    print(currentDay)
 
     if currentDay in weekdayList:
-        sendHour = 18  # 6pm every day
+        print('Current hour = ' + str(currentHour))
+        sendHour = 15  # 18 = 6pm every day
         if currentHour == sendHour:
+            print('Sending alerts...')
             sendAllAlerts()
-            while True:
-                if currentHour == sendHour + 1:
-                    break
-    time.sleep(60)
+            time.sleep(3600)
+    time.sleep(10)

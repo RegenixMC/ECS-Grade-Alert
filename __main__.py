@@ -14,7 +14,6 @@ weekdayList = [7, 1, 2, 3, 4]
 while True:
     currentHour = int(time.strftime("%H"))
     currentDay = int(date.today().isoweekday())
-    print(currentDay)
 
     if currentDay in weekdayList:
         print('Current hour = ' + str(currentHour))

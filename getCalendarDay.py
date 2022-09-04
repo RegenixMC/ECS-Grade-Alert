@@ -33,5 +33,6 @@ def getDayColor(username, password):
             return 'Blue'
 
         else:
-            print('ERROR! This error could have been caused by FACTS updating their website html.')
-            return 'NONE'
+            #print('ERROR! This error could have been caused by FACTS updating their website html.')
+            #return 'NONE'
+            return 'no school'

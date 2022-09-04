@@ -59,18 +59,22 @@ def sendAllAlerts():
                 #print(assignmentName + ' ' + assignmentDueDate)
 
 
-
-        emailContext = ('Good evening ' + userName + ',\n\n' + 'Tomorrow will be a ' + getDayColor(username, password) + ' Day so make make sure you have the required notebooks and folders for your classes.\n')
+        dayColor = getDayColor(username, password)
+        if dayColor == 'no school':
+            emailContext = ('Good evening ' + userName + ',\n\nTomorrow there is no school so make sure you sleep in!')
         
-        if emailContextClasses != []:
-            classesDueTmr = int(len(emailContextClasses))
-            for i in range(classesDueTmr):
-                classNames = (classNames + emailContextClasses[i] + '\n')
-
-            emailContext = ('Good evening ' + userName + ',\n\n' + 'Tomorrow will be a ' + getDayColor(username, password) + ' Day so make make sure you have the required notebooks and folders.\n' + 'You have an assignment and/or a test due tomorrow in the following classes...' + classNames)
-
         else:
-            emailContext = ('Good evening ' + userName + ',\n\n' + 'Tomorrow will be a ' + getDayColor(username, password) + ' Day so make make sure you have the required notebooks and folders.\n' + 'It\'s your lucky day! You have no assignments or tests due tomorrow!')
+
+            emailContext = ('Good evening ' + userName + ',\n\n' + 'Tomorrow will be a ' + dayColor + ' Day so make make sure you have the required notebooks and folders for your classes.\n')
+            if emailContextClasses != []:
+                classesDueTmr = int(len(emailContextClasses))
+                for i in range(classesDueTmr):
+                    classNames = (classNames + emailContextClasses[i] + '\n')
+
+                emailContext = ('Good evening ' + userName + ',\n\n' + 'Tomorrow will be a ' + dayColor + ' Day so make make sure you have the required notebooks and folders.\n' + 'You have an assignment and/or a test due tomorrow in the following classes...' + classNames)
+
+            else:
+                emailContext = ('Good evening ' + userName + ',\n\n' + 'Tomorrow will be a ' + dayColor + ' Day so make make sure you have the required notebooks and folders.\n' + 'It\'s your lucky day! You have no assignments or tests due tomorrow!')
 
 
 

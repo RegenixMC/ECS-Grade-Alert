@@ -27,8 +27,8 @@ def getDayColor(username, password):
 
         dateCount = calendar.count(tmrDate)
 
-        with open("2PageHTML.txt", "w") as text_file:
-            text_file.write(calendar)
+        #with open("2PageHTML.txt", "w") as text_file:
+            #text_file.write(calendar)
             
         count1 = 0
         for i in range(dateCount):

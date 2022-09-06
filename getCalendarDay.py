@@ -18,21 +18,30 @@ def getDayColor(username, password):
 
     with requests.Session() as s:
         calendar = s.post('https://ec-va.client.renweb.com/pwr/', data=payload)
-        calendar = (s.post('https://ec-va.client.renweb.com/pwr/school/'))
-        calendar = calendar.text
+        calendar = (s.post('https://ec-va.client.renweb.com/pwr/school/')).text
 
         currentYear = date.today().strftime("%y")
         currentMonth = (date.today().strftime("%m")).replace('0', '')
-        currentDay = (int(date.today().strftime("%d")) + 1)
+        currentDay = (int(date.today().strftime("%d"))) + 1
+        tmrDate = str(currentMonth) + '/' + str(currentDay) + '/' + str(currentYear)
 
-        allTextAfterDate = calendar.split(str(currentMonth) + '/' + str(currentDay) + '/' + str(currentYear))[1]
-        dayColorDate = str((allTextAfterDate.split('<h5>'))[1].split('</h5>')[0]).replace(' ', '').lower() # Grabs the raw text from the header above the current day on the calendar
-        if 'white' in dayColorDate:
-            return 'White'
-        elif 'blue' in dayColorDate:
-            return 'Blue'
+        dateCount = calendar.count(tmrDate)
 
-        else:
-            #print('ERROR! This error could have been caused by FACTS updating their website html.')
-            #return 'NONE'
-            return 'no school'
+        with open("2PageHTML.txt", "w") as text_file:
+            text_file.write(calendar)
+            
+        count1 = 0
+        for i in range(dateCount):
+            count1 +=1
+            try:
+                dateCheck = ((calendar.split(tmrDate))[count1].split('</tr>')[0]).lower()
+                if 'white' in dateCheck:
+                    return 'White'
+                elif 'blue' in dateCheck:
+                    return 'Blue'
+            except:
+                pass
+        
+
+        return 'failed'
+        # Maybe no school this day? or website html changed and code has to be updated

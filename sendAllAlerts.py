@@ -66,8 +66,8 @@ def sendAllAlerts():
 
 
         dayColor = getDayColor(username, password)
-        if dayColor == 'no school':
-            emailContext = ('Good evening ' + userName + ',\n\nTomorrow there is no school so make sure you sleep in!')
+        if dayColor == 'failed':
+            return
         
         else:
 
@@ -77,12 +77,12 @@ def sendAllAlerts():
                 for i in range(classesDueTmr):
                     classNames = (classNames + emailContextClasses[i] + '\n')
 
-                emailContext = ('Good evening ' + userName + ',\n\n' + 'Tomorrow will be a ' + dayColor + ' Day so make make sure you have the required notebooks and folders.\n' + 'You have an assignment and/or a test due tomorrow in the following classes...' + classNames)
+                emailContext = ('Good evening ' + userName + ',\n\n' + 'Tomorrow will be a ' + dayColor + ' Day so make make sure you have the required notebooks and folders.\n' + 'You have an assignment and/or a test due tomorrow in the following classes...' + classNames + '\nYou may have more assignments that were not posted on FACTS portal so make sure to check your planner.')
 
             else:
-                emailContext = ('Good evening ' + userName + ',\n\n' + 'Tomorrow will be a ' + dayColor + ' Day so make make sure you have the required notebooks and folders.\n' + 'It\'s your lucky day! You have no assignments or tests due tomorrow!')
+                emailContext = ('Good evening ' + userName + ',\n\n' + 'Tomorrow will be a ' + dayColor + ' Day so make make sure you have the required notebooks and folders.\n' + 'It\'s your lucky day! You have no assignments or tests due tomorrow according to FACTS! Make sure to check your planner just incase something wasn\'t posted on the FACTS portal.')
 
 
 
-
+        #print(emailContext)
         sendEmail(emailContext, email)
